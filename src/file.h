@@ -2,9 +2,10 @@
 #define HASHMAP_OPTIMISED_FILE_H
 
 #include "hashmap.h"
+#include "common.h"
 
 namespace hashmap {
-    hashmap_t *load(const char *filename);
+    result_t populate(hashmap_t *self, const char *filename);
 }
 
 #endif //HASHMAP_OPTIMISED_FILE_H

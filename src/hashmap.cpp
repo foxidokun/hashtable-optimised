@@ -7,6 +7,10 @@
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+static double_node_t *node_new();
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 hashmap_t *hashmap::ctor(size_t requested_size, hash_func_t hash_func) {
     hashmap_t *self = (hashmap_t *) calloc(1, sizeof(hashmap_t));
 
@@ -39,8 +43,11 @@ void hashmap::dtor(hashmap_t *self) {
     // Free memory used by double_nodes, allocated with malloc (self->bucket[i] 's childs)
     for (size_t i = 0; i < self->bucket_len; ++i) {
         current = self->buckets + i;
+        if (current->value1) free(current->value1);
+        if (current->value2) free(current->value2);
+        current = current->next;
 
-        while (current->next != nullptr) {
+        while (current != nullptr) {
             next = current->next;
 
             free(current->value1);
@@ -51,6 +58,7 @@ void hashmap::dtor(hashmap_t *self) {
         }
     }
 
+    free(self->buckets);
     free(self);
 }
 
@@ -70,6 +78,10 @@ void hashmap::insert(hashmap_t *self, const char *key, const char *value) {
     double_node_t *bucket = self->buckets + hash;
 
     while (bucket->value2 != nullptr) {
+        if (bucket->next == nullptr) {
+            bucket->next = node_new();
+        }
+
         bucket = bucket->next;
     }
 
@@ -105,4 +117,10 @@ char *hashmap::find(hashmap_t *self, const char *key) {
             return nullptr;
         }
     }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+static double_node_t *node_new() {
+    return (double_node_t *) calloc(1, sizeof (double_node_t));
 }
