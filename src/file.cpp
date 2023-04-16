@@ -8,50 +8,66 @@
 #include "file.h"
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Internal structs
-// ---------------------------------------------------------------------------------------------------------------------
-
-struct mmaped_file_t {
-    unsigned char *data;
-    size_t size;
-};
-
-// ---------------------------------------------------------------------------------------------------------------------
 // Prototypes
 // ---------------------------------------------------------------------------------------------------------------------
 
 static mmaped_file_t mmap_file_or_warn(const char *name);
 static void mmap_close (mmaped_file_t file);
 static size_t get_file_size (int fd);
+static uint count_lines(const char *data);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Public
 // ---------------------------------------------------------------------------------------------------------------------
 
-result_t hashmap::populate(hashmap_t *self, const char *filename) {
-    mmaped_file_t file = mmap_file_or_warn(filename);
-    if (!file.data) { return result_t::ERROR; }
+void hashmap::populate(hashmap_t *self, database_t *database) {
+    for (uint i = 0; i < database->len; ++i) {
+        insert(self, database->keys[i], database->values[i]);
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+database_t *database::load(const char *dictionary_file) {
+    mmaped_file_t file = mmap_file_or_warn(dictionary_file);
+    if (!file.data) { return nullptr; }
+
+    uint lines = count_lines((char *)file.data);
+    database_t *self = (database_t *) calloc(1, sizeof(database_t));
+    self->keys   = (char **) calloc(lines, sizeof(char *));
+    self->values = (char **) calloc(lines, sizeof(char *));
+    self->file   = file;
 
     char *key   = (char *) file.data;
     char *value = (char *) file.data;
     char *tmp   = nullptr;
 
-    while (key - (const char *) file.data < file.size) {
-        while (isspace(*key)) {key++;}
+    uint i = 0;
+    for (; key - (char *)file.data < file.size; ++i) {
+        while (isspace(*key)) { key++; }
 
         value = strchr(key, ' ');
         *value = '\0';
         value++;
-        while (isspace(*value)) {value++;}
+        while (isspace(*value)) { value++; }
 
         tmp = strchr(value, '\n');
         *tmp = '\0';
 
-        insert(self, key, value);
-        key = tmp+1;
+        self->keys[i]   = key;
+        self->values[i] = value;
+        key = tmp + 1;
     }
+    self->len = i;
 
-    return result_t::OK;
+    return self;
+}
+
+void database::unload(database_t *self) {
+    mmap_close(self->file);
+    free(self->values);
+    free(self->keys);
+    free(self);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -93,4 +109,17 @@ static size_t get_file_size (int fd)
     struct stat st = {};
     fstat(fd, &st);
     return st.st_size;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+static uint count_lines(const char *data) {
+    uint counter = 0;
+    data--;
+
+    while ((data = strchr(data+1, '\n'))) {
+        counter++;
+    }
+
+    return counter;
 }

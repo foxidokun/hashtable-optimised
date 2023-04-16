@@ -26,7 +26,7 @@ uint64_t crc32_hash(const char *obj) {
     unsigned char byte = 0;
     unsigned int crc = 0xFFFFFFFF, mask = 0;
 
-    while ((byte = (unsigned char) *obj))
+    while ((byte = (unsigned char) *obj++))
     {
         crc = crc ^ byte;
 
@@ -35,8 +35,6 @@ uint64_t crc32_hash(const char *obj) {
             mask = -(crc & 1);
             crc = (crc >> 1) ^ (0xEDB88320 & mask);
         }
-
-        obj++;
     }
     return ~crc;
 }
@@ -47,7 +45,7 @@ uint64_t rol_hash(const char *obj) {
     uint64_t hash = 0;
     unsigned char c = 0;
 
-    while ((c = (unsigned char) *obj)) {
+    while ((c = (unsigned char) *obj++)) {
         hash = rol(hash) + c;
     }
 
@@ -60,7 +58,7 @@ uint64_t ror_hash(const char *obj) {
     uint64_t hash = 0;
     unsigned char c = 0;
 
-    while ((c = (unsigned char) *obj)) {
+    while ((c = (unsigned char) *obj++)) {
         hash = ror(hash) + c;
     }
 
@@ -85,7 +83,7 @@ uint64_t sum_hash(const char *obj) {
     uint64_t hash = 0;
     unsigned char c = 0;
 
-    while ((c = (unsigned char) *obj)) {
+    while ((c = (unsigned char) *obj++)) {
         hash += c;
     }
 
@@ -99,7 +97,7 @@ uint64_t avg_hash(const char *obj) {
     unsigned char c = 0;
     unsigned int len = 0;
 
-    while ((c = (unsigned char) *obj)) {
+    while ((c = (unsigned char) *obj++)) {
         hash += c;
         len++;
     }
