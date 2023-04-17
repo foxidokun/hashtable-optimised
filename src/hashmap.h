@@ -7,12 +7,10 @@ const int KEY_SIZE = 32;
 
 struct double_node_t {
     // 64 bytes for max cache utilisation
-    char key1[KEY_SIZE]; //32
-    char key2[KEY_SIZE]; //32
+    char key[KEY_SIZE]; //32
 
     // Other metadata in other cache line
-    char *value1;        //8
-    char *value2;        //8
+    char *value;        //8
     double_node_t *next; //8
 };
 

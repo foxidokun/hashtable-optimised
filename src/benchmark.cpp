@@ -107,9 +107,7 @@ static uint get_chain_length(double_node_t *node) {
     uint length = 0;
 
     while (node != nullptr) {
-        if (node->value2) {
-            length += 2;
-        } else if (node->value1) {
+        if (node->value) {
             length++;
         }
 
