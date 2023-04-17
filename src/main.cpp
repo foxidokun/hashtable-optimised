@@ -37,7 +37,7 @@ void generate_statistics(database_t *database) {
 }
 
 void benchmarking(database_t *database) {
-    hashmap_t *map = hashmap::ctor(HASHMAP_SIZE, crc32_hash);
+    hashmap_t *map = hashmap::ctor(HASHMAP_SIZE, crc32_intrin_hash);
     hashmap::populate(map, database);
 
     benchmark_search(map, database, REPORTS_DIR VERSION_NAME ".json");
