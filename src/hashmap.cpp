@@ -43,13 +43,15 @@ void hashmap::dtor(hashmap_t *self) {
     // Free memory used by double_nodes, allocated with malloc (self->bucket[i] 's childs)
     for (size_t i = 0; i < self->bucket_len; ++i) {
         current = self->buckets + i;
-        if (current->value) free(current->value);
+        if (current->value1) free(current->value1);
+        if (current->value2) free(current->value2);
         current = current->next;
 
         while (current != nullptr) {
             next = current->next;
 
-            free(current->value);
+            free(current->value1);
+            free(current->value2);
             free(current);
 
             current = next;
@@ -75,7 +77,7 @@ void hashmap::insert(hashmap_t *self, const char *key, const char *value) {
 
     double_node_t *bucket = self->buckets + hash;
 
-    while (bucket->value != nullptr) {
+    while (bucket->value2 != nullptr) {
         if (bucket->next == nullptr) {
             bucket->next = node_new();
         }
@@ -83,8 +85,13 @@ void hashmap::insert(hashmap_t *self, const char *key, const char *value) {
         bucket = bucket->next;
     }
 
-    strcpy(bucket->key, key);
-    bucket->value = strdup(value);
+    if (bucket->value1 == nullptr) {
+        strcpy(bucket->key1, key);
+        bucket->value1 = strdup(value);
+    } else {
+        strcpy(bucket->key2, key);
+        bucket->value2 = strdup(value);
+    }
 
     self->size++;
 }
@@ -98,8 +105,10 @@ char *hashmap::find(hashmap_t *self, const char *key) {
     double_node_t *bucket = self->buckets + hash;
 
     while (true) {
-        if (strcmp(key, bucket->key) == 0) {
-            return bucket->value;
+        if (strcmp(key, bucket->key1) == 0) {
+            return bucket->value1;
+        } else if (bucket->value2 && strcmp(key, bucket->key2) == 0) {
+            return bucket->value2;
         }
 
         if (bucket->next) {
