@@ -17,10 +17,10 @@ int main() {
         fprintf(stderr, "Failed to open dictionary file, see logs");
     }
 
-    generate_statistics(database);
-    printf("stats generated\n");
-//    benchmarking(database);
-//    printf("benchmarked\n");
+//    generate_statistics(database);
+//    printf("stats generated\n");
+    benchmarking(database);
+    printf("benchmarked\n");
 
     database::unload(database);
 }

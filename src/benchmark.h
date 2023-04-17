@@ -1,6 +1,8 @@
 #ifndef HASHMAP_OPTIMISED_BENCHMARK_H
 #define HASHMAP_OPTIMISED_BENCHMARK_H
 
+#include "hashmap.h"
+#include "file.h"
 #include "common.h"
 result_t INTERNAL_gen_hash_stat(size_t size, hash_func_t hash_func, database_t *database,
                                 const char *hash_func_name, const char *filename);
