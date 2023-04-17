@@ -42,24 +42,6 @@ uint64_t crc32_hash(const char *obj) {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-// Works only with 32 byte object
-uint64_t crc32_intrin_hash(const char *obj) {
-    uint64_t crc;
-
-    asm(".intel_syntax noprefix\n"
-        "xor     %0, %0\n"
-        "crc32   %0, QWORD PTR [%1]\n"
-        "crc32   %0, QWORD PTR [%1+8]\n"
-        "crc32   %0, QWORD PTR [%1+16]\n"
-        "crc32   %0, QWORD PTR [%1+24]\n"
-        ".att_syntax"
-        : "=r" (crc) : "r" (obj));
-
-    return crc;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-
 uint64_t rol_hash(const char *obj) {
     uint64_t hash = 0;
     unsigned char c = 0;
