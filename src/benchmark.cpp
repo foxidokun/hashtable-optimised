@@ -121,7 +121,7 @@ static uint get_chain_length(double_node_t *node) {
 
 static long measure_one_search_iteration(hashmap_t *self, database_t *database) {
     size_t key_count = database->len;
-    char **keys = database->keys;
+    char (*keys)[KEY_SIZE] = database->keys;
 
     auto begin = std::chrono::high_resolution_clock::now();
     for (size_t i = 0; i < key_count; ++i) {

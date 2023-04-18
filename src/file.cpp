@@ -34,7 +34,7 @@ database_t *database::load(const char *dictionary_file) {
 
     uint lines = count_lines((char *)file.data);
     database_t *self = (database_t *) calloc(1, sizeof(database_t));
-    self->keys   = (char **) calloc(lines, sizeof(char *));
+    self->keys   = (char (*)[KEY_SIZE]) calloc(lines, KEY_SIZE);
     self->values = (char **) calloc(lines, sizeof(char *));
     self->file   = file;
 
@@ -54,7 +54,7 @@ database_t *database::load(const char *dictionary_file) {
         tmp = strchr(value, '\n');
         *tmp = '\0';
 
-        self->keys[i]   = key;
+        strncpy(self->keys[i], key, KEY_SIZE);
         self->values[i] = value;
         key = tmp + 1;
     }

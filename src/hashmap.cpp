@@ -70,9 +70,7 @@ size_t hashmap::size(hashmap_t *self) {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void hashmap::insert(hashmap_t *self, const char *key, const char *value) {
-    assert(strlen(key) < 32);
-
+void hashmap::insert(hashmap_t *self, const char key[KEY_SIZE], const char *value) {
     size_t hash = self->hash_func(key) % self->bucket_len;
 
     double_node_t *bucket = self->buckets + hash;
@@ -98,7 +96,7 @@ void hashmap::insert(hashmap_t *self, const char *key, const char *value) {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-char *hashmap::find(hashmap_t *self, const char *key) {
+char *hashmap::find(hashmap_t *self, const char key[KEY_SIZE]) {
     assert(strlen(key) < 32);
 
     size_t hash = self->hash_func(key) % self->bucket_len;

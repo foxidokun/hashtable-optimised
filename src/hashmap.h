@@ -30,8 +30,8 @@ namespace hashmap {
 
     size_t size(hashmap_t *self);
 
-    void insert(hashmap_t *self, const char *key, const char *value);
-    char *find(hashmap_t * self, const char *key);
+    void insert(hashmap_t *self, const char key[KEY_SIZE], const char *value);
+    char *find(hashmap_t *self, const char key[KEY_SIZE]);
 }
 
 #endif //HASHMAP_OPTIMISED_HASHMAP_H

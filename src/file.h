@@ -10,7 +10,7 @@ struct mmaped_file_t {
 };
 
 struct database_t {
-    char **keys;
+    char (*keys)[KEY_SIZE];
     char **values;
     size_t len;
 
