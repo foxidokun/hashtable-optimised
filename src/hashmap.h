@@ -5,7 +5,8 @@
 
 const int KEY_SIZE = 32;
 
-struct double_node_t {
+const static int CACHELINE = 64;
+struct alignas(CACHELINE) double_node_t {
     // 64 bytes for max cache utilisation
     char key1[KEY_SIZE]; //32
     char key2[KEY_SIZE]; //32
