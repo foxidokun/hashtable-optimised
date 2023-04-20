@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
 #include "file.h"
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -47,8 +48,10 @@ database_t *database::load(const char *dictionary_file) {
     for (; key - (char *)file.data < file.size; ++i) {
         while (isspace(*key)) { key++; }
 
-        value = strchr(key, ' ');
-        *value = '\0';
+        value = strchr(key, '@');
+        *value = ' ';
+        while (isspace(*value)) { value--; }
+        *++value = '\0';
         value++;
         while (isspace(*value)) { value++; }
 
@@ -78,7 +81,7 @@ void database::unload(database_t *self) {
 static mmaped_file_t mmap_file_or_warn(const char *name) {
     int fd = open(name, O_RDWR);
     if (fd < 0) {
-        fprintf (stderr, "Failed to open file '%s'\n", name);
+        fprintf (stderr, "Failed to open file '%s', reason: %s\n", name, strerror(errno));
         return {.data=nullptr};
     }
 

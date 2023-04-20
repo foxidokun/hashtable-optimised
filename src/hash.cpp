@@ -1,4 +1,4 @@
-#include <nmmintrin.h>
+#include <string.h>
 #include "hash.h"
 
 
@@ -93,17 +93,8 @@ uint64_t sum_hash(const char *obj) {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-uint64_t avg_hash(const char *obj) {
-    uint64_t hash = 0;
-    unsigned char c = 0;
-    unsigned int len = 0;
-
-    while ((c = (unsigned char) *obj++)) {
-        hash += c;
-        len++;
-    }
-
-    return hash / len;
+uint64_t strlen_hash(const char *obj) {
+    return strlen(obj);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

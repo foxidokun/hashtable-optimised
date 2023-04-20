@@ -86,10 +86,10 @@ void hashmap::insert(hashmap_t *self, const char key[KEY_SIZE], const char *valu
     }
 
     if (bucket->value1 == nullptr) {
-        strcpy(bucket->key1, key);
+        strncpy(bucket->key1, key, KEY_SIZE);
         bucket->value1 = strdup(value);
     } else {
-        strcpy(bucket->key2, key);
+        strncpy(bucket->key2, key, KEY_SIZE);
         bucket->value2 = strdup(value);
     }
 
@@ -105,9 +105,9 @@ char *hashmap::find(hashmap_t *self, const char key[KEY_SIZE]) {
     double_node_t *bucket = self->buckets + hash;
 
     while (true) {
-        if (asm_strcmp(key, bucket->key1) == 0) {
+        if (strcmp(key, bucket->key1) == 0) {
             return bucket->value1;
-        } else if (bucket->value2 && asm_strcmp(key, bucket->key2) == 0) {
+        } else if (bucket->value2 && strcmp(key, bucket->key2) == 0) {
             return bucket->value2;
         }
 

@@ -12,6 +12,7 @@
 static void print_chain_lengths(hashmap_t *self, FILE *file);
 static uint get_chain_length(double_node_t *node);
 static long measure_one_search_iteration(hashmap_t *self, database_t *database);
+static long benchmark_one_hash_iteration(hash_func_t hash_func, database_t *database);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Public
@@ -82,6 +83,40 @@ result_t benchmark_search(hashmap_t *self, database_t *database, const char *rep
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+
+// TODO Copypasta
+result_t benchmark_hash(hash_func_t func, database_t *database, const char *report_filename) {
+    FILE *file = fopen(report_filename, "w");
+    if (!file) { return result_t::ERROR; }
+
+    long measures[REPEAT_NUM] = {};
+
+    fprintf(file, R"({"elapsed_times": [)" "\n");
+
+    for (int iter_num = 0; iter_num < REPEAT_NUM; ++iter_num) {
+        measures[iter_num] = benchmark_one_hash_iteration(func, database);
+
+        if (iter_num+1 != REPEAT_NUM) {
+            fprintf(file, "%ld, \n", measures[iter_num]);
+        } else {
+            fprintf(file, "%ld\n", measures[iter_num]);
+        }
+    }
+    fprintf(file, "], \n");
+
+    long long unsigned sum_time = 0;
+    for (int i = 0; i < REPEAT_NUM; ++i) {
+        sum_time += (unsigned long) measures[i];
+    }
+
+    fprintf(file, R"("avg_time": %llu)", sum_time / REPEAT_NUM);
+    fprintf(file, "}\n");
+
+    fclose(file);
+    return result_t::OK;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 // Static
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -127,6 +162,24 @@ static long measure_one_search_iteration(hashmap_t *self, database_t *database) 
     for (size_t i = 0; i < key_count; ++i) {
         hashmap::find(self, keys[i]);
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+
+    return elapsed.count();
+}
+
+static long benchmark_one_hash_iteration(hash_func_t hash_func, database_t *database) {
+    size_t key_count = database->len;
+    char (*keys)[KEY_SIZE] = database->keys;
+
+    auto begin = std::chrono::high_resolution_clock::now();
+
+    for (int repeat_num = 0; repeat_num < HASH_REPEAT_NUM; ++repeat_num) {
+        for (size_t i = 0; i < key_count; ++i) {
+            hash_func(keys[i]);
+        }
+    }
+
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
 

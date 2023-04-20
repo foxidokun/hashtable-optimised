@@ -14,6 +14,6 @@ uint64_t ror_hash(const char *obj);
 uint64_t const_hash(const char *);
 uint64_t first_char_hash(const char *obj);
 uint64_t sum_hash(const char *obj);
-uint64_t avg_hash(const char *obj);
+uint64_t strlen_hash(const char *obj);
 
 #endif //HASHMAP_OPTIMISED_HASH_H
