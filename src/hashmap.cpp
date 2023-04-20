@@ -134,10 +134,10 @@ static  __attribute__ ((always_inline)) inline int asm_strcmp(const char str1[KE
         "        vmovdqa ymm0, YMMWORD PTR [%1]\n"  // Load aligned str1
         "        xor     %d0, %d0\n"                // Zero return value
         "\n"
-        "        vptest  ymm0, YMMWORD PTR [%2]\n" // test two strings
+        "        vptest  ymm0, YMMWORD PTR [%2]\n"  // test two strings
         "        seta    %b0\n"                     // set return value to planned
         "\n"
-        "        vzeroupper\n"                     // AVX meme: zero upper to avoid mixing modes
+        "        vzeroupper\n"                      // AVX meme: zero upper to avoid mixing modes
         ".att_syntax prefix\n"
         :  "=&r" (res) : "r" (str1), "r" (str2) : "ymm0", "cc");
 
