@@ -137,6 +137,7 @@ static void print_chain_lengths(hashmap_t *self, FILE *file) {
     fprintf(file, "%u", length);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
 
 static uint get_chain_length(double_node_t *node) {
     uint length = 0;
@@ -154,6 +155,8 @@ static uint get_chain_length(double_node_t *node) {
     return length;
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 static long measure_one_search_iteration(hashmap_t *self, database_t *database) {
     size_t key_count = database->len;
     char (*keys)[KEY_SIZE] = database->keys;
@@ -167,6 +170,8 @@ static long measure_one_search_iteration(hashmap_t *self, database_t *database) 
 
     return elapsed.count();
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 static long benchmark_one_hash_iteration(hash_func_t hash_func, database_t *database) {
     size_t key_count = database->len;
