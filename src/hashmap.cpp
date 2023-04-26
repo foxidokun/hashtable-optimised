@@ -9,7 +9,8 @@
 
 static double_node_t *node_new();
 
-static inline int asm_strcmp(const char str1[KEY_SIZE], const char str2[KEY_SIZE]);
+static inline int asm_strcmp_inline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]);
+extern "C" int asm_strcmp_noinline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]);
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -127,7 +128,7 @@ static double_node_t *node_new() {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-static  __attribute__ ((always_inline)) inline int asm_strcmp(const char str1[KEY_SIZE], const char str2[KEY_SIZE]) {
+static  __attribute__ ((always_inline)) inline int asm_strcmp_inline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]) {
     int res;
 
     asm inline (".intel_syntax noprefix\n"
@@ -137,7 +138,7 @@ static  __attribute__ ((always_inline)) inline int asm_strcmp(const char str1[KE
         "        vptest  ymm0, YMMWORD PTR [%2]\n"  // test two strings
         "        seta    %b0\n"                     // set return value to planned
         "\n"
-        "        vzeroupper\n"                      // AVX meme: zero upper to avoid mixing modes
+        "        vzeroupper\n"                      // https://www.agner.org/optimize/calling_conventions.pdf page 14
         ".att_syntax prefix\n"
         :  "=&r" (res) : "r" (str1), "r" (str2) : "ymm0", "cc");
 

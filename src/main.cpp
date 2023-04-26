@@ -26,11 +26,11 @@ int main() {
 
 //    generate_statistics(database);
 //    printf("stats generated\n");
-//    benchmarking_search(database);
-//    printf("benchmarked\n");
+    benchmarking_search(database);
+    printf("benchmarked\n");
 
-    benchmarking_hash(database);
-    printf("benchmarked hash\n");
+//    benchmarking_hash(database);
+//    printf("benchmarked hash\n");
 
     database::unload(database);
 }

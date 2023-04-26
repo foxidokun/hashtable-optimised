@@ -11,7 +11,7 @@ enum class result_t {
 #define REPORTS_DIR "reports/"
 #define VERSION_NAME "v4"
 
-const int REPEAT_NUM = 100;
+const int REPEAT_NUM = 3000;
 
 const int HASH_REPEAT_NUM = 10;
 
