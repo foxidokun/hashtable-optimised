@@ -99,16 +99,16 @@ void hashmap::insert(hashmap_t *self, const char key[KEY_SIZE], const char *valu
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-char *hashmap::find(hashmap_t *self, const char key[KEY_SIZE]) {
+char * __attribute__ ((noinline)) hashmap::find(hashmap_t *self, const char key[KEY_SIZE]) {
     assert(strlen(key) < 32);
 
     size_t hash = self->hash_func(key) % self->bucket_len;
     double_node_t *bucket = self->buckets + hash;
 
     while (true) {
-        if (asm_strcmp_inline(key, bucket->key1) == 0) {
+        if (strcmp(key, bucket->key1) == 0) {
             return bucket->value1;
-        } else if (bucket->value2 && asm_strcmp_inline(key, bucket->key2) == 0) {
+        } else if (bucket->value2 && strcmp(key, bucket->key2) == 0) {
             return bucket->value2;
         }
 
