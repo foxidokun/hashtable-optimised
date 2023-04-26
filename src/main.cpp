@@ -46,6 +46,7 @@ void generate_statistics(database_t *database) {
         gen_hash_stats(HASHMAP_SIZE, first_char_hash, database);
         gen_hash_stats(HASHMAP_SIZE, sum_hash,        database);
         gen_hash_stats(HASHMAP_SIZE, strlen_hash,     database);
+        gen_hash_stats(HASHMAP_SIZE, crc32_intrin_hash, database);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

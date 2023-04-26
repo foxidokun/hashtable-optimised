@@ -10,7 +10,7 @@
 static double_node_t *node_new();
 
 static inline int asm_strcmp_inline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]);
-extern "C" int asm_strcmp_noinline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]);
+extern "C" __attribute__ ((noinline)) int asm_strcmp_noinline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]);
 
 // ---------------------------------------------------------------------------------------------------------------------
 
