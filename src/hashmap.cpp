@@ -106,9 +106,9 @@ char *hashmap::find(hashmap_t *self, const char key[KEY_SIZE]) {
     double_node_t *bucket = self->buckets + hash;
 
     while (true) {
-        if (asm_strcmp_noinline(key, bucket->key1) == 0) {
+        if (asm_strcmp_inline(key, bucket->key1) == 0) {
             return bucket->value1;
-        } else if (bucket->value2 && asm_strcmp_noinline(key, bucket->key2) == 0) {
+        } else if (bucket->value2 && asm_strcmp_inline(key, bucket->key2) == 0) {
             return bucket->value2;
         }
 
@@ -128,12 +128,12 @@ static double_node_t *node_new() {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-static  __attribute__ ((always_inline)) inline int asm_strcmp_inline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]) {
+static  __attribute__ ((always_inline)) int asm_strcmp_inline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]) {
     int res;
 
     asm inline (".intel_syntax noprefix\n"
         "        vmovdqa ymm0, YMMWORD PTR [%1]\n"  // Load aligned str1
-        "        xor     %d0, %d0\n"                // Zero return value
+        "        xor     %0, %0\n"                // Zero return value
         "\n"
         "        vptest  ymm0, YMMWORD PTR [%2]\n"  // test two strings
         "        seta    %b0\n"                     // set return value to planned
