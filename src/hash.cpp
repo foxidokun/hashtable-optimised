@@ -103,10 +103,10 @@ uint64_t strlen_hash(const char *obj) {
 uint64_t crc32_intrin_hash(const char *obj) {
     uint64_t hash = 0;
 
-//    hash = _mm_crc32_u64(hash, *((const uint64_t *)obj + 0));
-//    hash = _mm_crc32_u64(hash, *((const uint64_t *)obj + 1));
-//    hash = _mm_crc32_u64(hash, *((const uint64_t *)obj + 2));
-//    hash = _mm_crc32_u64(hash, *((const uint64_t *)obj + 3));
+    hash = _mm_crc32_u64(hash, *((const uint64_t *)obj + 0));
+    hash = _mm_crc32_u64(hash, *((const uint64_t *)obj + 1));
+    hash = _mm_crc32_u64(hash, *((const uint64_t *)obj + 2));
+    hash = _mm_crc32_u64(hash, *((const uint64_t *)obj + 3));
 
     return hash;
 }
