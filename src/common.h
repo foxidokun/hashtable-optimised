@@ -9,7 +9,7 @@ enum class result_t {
 #define UNWRAP_ERROR(code) { if ((code) == result_t::ERROR) { return result_t::ERROR; } }
 
 #define REPORTS_DIR "reports/"
-#define VERSION_NAME "v5"
+#define VERSION_NAME "v6"
 
 const int REPEAT_NUM = 3000;
 
