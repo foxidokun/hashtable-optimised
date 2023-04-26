@@ -106,9 +106,9 @@ char *hashmap::find(hashmap_t *self, const char key[KEY_SIZE]) {
     double_node_t *bucket = self->buckets + hash;
 
     while (true) {
-        if (strcmp(key, bucket->key1) == 0) {
+        if (asm_strcmp_noinline(key, bucket->key1) == 0) {
             return bucket->value1;
-        } else if (bucket->value2 && strcmp(key, bucket->key2) == 0) {
+        } else if (bucket->value2 && asm_strcmp_noinline(key, bucket->key2) == 0) {
             return bucket->value2;
         }
 

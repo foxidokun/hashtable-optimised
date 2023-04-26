@@ -1,15 +1,6 @@
-global crc32_intrin_hash
+global asm_strcmp_noinline
 
 segment .text
-
-; uint64_t crc32_intrin_hash(const char obj[32])
-crc32_intrin_hash:
-    xor rax, rax
-    crc32 rax, QWORD [rdi]
-    crc32 rax, QWORD [rdi+8]
-    crc32 rax, QWORD [rdi+16]
-    crc32 rax, QWORD [rdi+24]
-    ret
 
 asm_strcmp_noinline:
         vmovdqa ymm0, YWORD [rdi]
