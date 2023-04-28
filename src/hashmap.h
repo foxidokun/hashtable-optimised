@@ -3,7 +3,11 @@
 
 #include "hash.h"
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 const int KEY_SIZE = 32;
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 const static int CACHELINE = 64;
 struct alignas(CACHELINE) double_node_t {
@@ -17,6 +21,8 @@ struct alignas(CACHELINE) double_node_t {
     double_node_t *next; //8
 };
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 struct hashmap_t {
     double_node_t *buckets;
     size_t bucket_len;
@@ -24,6 +30,8 @@ struct hashmap_t {
     size_t size;
     hash_func_t hash_func;
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 namespace hashmap {
     hashmap_t *ctor(size_t requested_size, hash_func_t hash_func);
