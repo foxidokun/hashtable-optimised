@@ -26,29 +26,29 @@
 
 Как и ожидалось, константный хеш имеет самое плохое распределение из возможных, превращая хештаблицу
 в связный список:
-![const_hash.png](images%2Fconst_hash.png)
+![const_hash.png](images%2Fconst_hash.png.jpg)
 
 Уже чуть лучше себя показывают хеш-функции длины / первого символа, однако их распределение тоже
 далеко от идеального в силу ограничений естественного языка.
-![strlen_hash.png](images%2Fstrlen_hash.png)
-![first_char_hash.png](images%2Ffirst_char_hash.png)
+![strlen_hash.png](images%2Fstrlen_hash.png.jpg)
+![first_char_hash.png](images%2Ffirst_char_hash.png.jpg)
 
 Так, например, различных букв всего 26, а значит диапазон принимаемых хешфункцией значений очень ограничен.
 Длина строки не лучше: слова длиннее 20 букв в природе очень редко, а значит диапазон значений strlen тоже мал.
 
 Более хорошо это видно на приближенных графиках:
-![strlen_hash_detailed.png](images%2Fstrlen_hash_detailed.png)
-![first_char_hash_detailed.png](images%2Ffirst_char_hash_detailed.png)
+![strlen_hash_detailed.png](images%2Fstrlen_hash_detailed.png.jpg)
+![first_char_hash_detailed.png](images%2Ffirst_char_hash_detailed.png.jpg)
 
 Прочие хеши показывают себя гораздо лучше, однако та же сумма в силу вышеописанных свойств естественного языка тоже имеет
 ограниченный набор значений:
 ![sum_hash.png](images%2Fsum_hash.png)
 
 rol/ror и прочие хеши не имеют таких недостатков и потому показывают гораздо лучшие распределения:
-![rol_hash.png](images%2Frol_hash.png)
-![ror_hash.png](images%2Fror_hash.png)
-![gnu_hash.png](images%2Fgnu_hash.png)
-![crc32_hash.png](images%2Fcrc32_hash.png)
+![rol_hash.png](images%2Frol_hash.png.jpg)
+![ror_hash.png](images%2Fror_hash.png.jpg)
+![gnu_hash.png](images%2Fgnu_hash.png.jpg)
+![crc32_hash.png](images%2Fcrc32_hash.png.jpg)
 
 С хеш-функциями rol/ror связана интересная особенность компилятора: хоть код и был написан на C без
 использования ассемблера, компилятор превратил
