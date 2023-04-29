@@ -12,6 +12,9 @@ static double_node_t *node_new();
 static inline int asm_strcmp_inline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]);
 extern "C" __attribute__ ((noinline)) int asm_strcmp_noinline(const char str1[KEY_SIZE], const char str2[KEY_SIZE]);
 
+static char * list_find(double_node_t *start, const char key[KEY_SIZE]);
+extern "C" char *list_find_asm(double_node_t *start, const char key[KEY_SIZE]);
+
 // ---------------------------------------------------------------------------------------------------------------------
 
 hashmap_t *hashmap::ctor(size_t requested_size, hash_func_t hash_func) {
@@ -87,10 +90,10 @@ void hashmap::insert(hashmap_t *self, const char key[KEY_SIZE], const char *valu
     }
 
     if (bucket->value1 == nullptr) {
-        strncpy(bucket->key1, key, KEY_SIZE);
+        strncpy(bucket->keys[0], key, KEY_SIZE);
         bucket->value1 = strdup(value);
     } else {
-        strncpy(bucket->key2, key, KEY_SIZE);
+        strncpy(bucket->keys[1], key, KEY_SIZE);
         bucket->value2 = strdup(value);
     }
 
@@ -100,20 +103,24 @@ void hashmap::insert(hashmap_t *self, const char key[KEY_SIZE], const char *valu
 // ---------------------------------------------------------------------------------------------------------------------
 
 char * __attribute__ ((noinline)) hashmap::find(hashmap_t *self, const char key[KEY_SIZE]) {
-    assert(strlen(key) < 32);
-
     size_t hash = self->hash_func(key) % self->bucket_len;
     double_node_t *bucket = self->buckets + hash;
 
+    return list_find(bucket, key);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+static char *list_find(double_node_t *start, const char key[KEY_SIZE]) {
     while (true) {
-        if (strcmp(key, bucket->key1) == 0) {
-            return bucket->value1;
-        } else if (bucket->value2 && strcmp(key, bucket->key2) == 0) {
-            return bucket->value2;
+        if (asm_strcmp_inline(key, start->keys[0]) == 0) {
+            return start->value1;
+        } else if (start->value2 && asm_strcmp_inline(key, start->keys[1]) == 0) {
+            return start->value2;
         }
 
-        if (bucket->next) {
-            bucket = bucket->next;
+        if (start->next) {
+            start = start->next;
         } else {
             return nullptr;
         }

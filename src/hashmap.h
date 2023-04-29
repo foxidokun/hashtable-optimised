@@ -12,8 +12,7 @@ const int KEY_SIZE = 32;
 const static int CACHELINE = 64;
 struct alignas(CACHELINE) double_node_t {
     // 64 bytes for max cache utilisation
-    char key1[KEY_SIZE]; //32
-    char key2[KEY_SIZE]; //32
+    char keys[2][KEY_SIZE]; //2x32
 
     // Other metadata in other cache line
     char *value1;        //8
@@ -30,6 +29,7 @@ struct hashmap_t {
     size_t size;
     hash_func_t hash_func;
 };
+//three runs
 
 // ---------------------------------------------------------------------------------------------------------------------
 

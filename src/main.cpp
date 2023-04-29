@@ -14,7 +14,6 @@ const char DICTIONARY_FILE[] = "data/dictbig.txt";
 
 void generate_statistics(database_t *database);
 void benchmarking_search(database_t *database);
-void benchmarking_hash(database_t *database);
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -28,9 +27,6 @@ int main() {
 //    printf("stats generated\n");
     benchmarking_search(database);
     printf("benchmarked\n");
-
-//    benchmarking_hash(database);
-//    printf("benchmarked hash\n");
 
     database::unload(database);
 }
@@ -58,18 +54,4 @@ void benchmarking_search(database_t *database) {
     benchmark_search(map, database, REPORTS_DIR VERSION_NAME ".json");
 
     hashmap::dtor(map);
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-#define benchmark_hash_macro(func) { \
-    benchmark_hash(func, database, REPORTS_DIR #func "_time.json"); \
-}
-
-void benchmarking_hash(database_t *database) {
-    benchmark_hash_macro(rol_hash);
-    benchmark_hash_macro(ror_hash);
-    benchmark_hash_macro(crc32_hash);
-    benchmark_hash_macro(gnu_hash);
-    benchmark_hash_macro(crc32_intrin_hash);
 }
