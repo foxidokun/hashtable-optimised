@@ -2,3 +2,12 @@
 cmake-build-debug/
 perf.data
 perf.data.old
+callgrind.out*
+cachegrind.out*
+*.s
+*.data
+notes.txt
+*.o
+graphics-checkpoint.ipynb
+perf.data.v[0-9]
+v0.json
